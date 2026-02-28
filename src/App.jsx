@@ -6,14 +6,14 @@ const PROJECT_ITEMS = [
     id: "presensi",
     title: "Presensi",
     type: "Internal Web App",
-    summary: "Internal attendance platform with multi-level approvals, automated summaries, and audit trails.",
-    challenge: "The HR team needed cross-department attendance visibility without manual month-end recaps.",
-    solution:
-      "Built an attendance dashboard with organization filters, approval workflow, and payroll-ready exports.",
-    impact: "Monthly recap time dropped from days to just a few hours.",
+    summary: "End-to-end attendance and HR submission platform (mobile check-in, website for  leave/permission/duty requests) with real-time dashboards, audit trails, and payroll-ready reporting.",
+    challenge: "Attendance was previously tracked via handkey machines and manual recaps, making cross-unit visibility slow and error-prone. HR struggled with delayed reporting, incomplete records, and frequent discrepancies that impacted allowance/tunjangan payments.",
+    solution: "Built a unified attendance and HR submission system: mobile check-in/out with location validation, digital workflows for leave/permission/duty with multi-level approvals, organization-based dashboards for HR, and automated payroll-ready exports. Added audit trails, role-based access, and automated monthly summaries to eliminate manual recaps.",
+    impact: "Eliminated manual month-end attendance recaps by digitizing attendance and HR submissions. Accelerated allowance processing by ~5d0%, improved HR service responsiveness by ~40%, and increased data accuracy by ~50%, significantly reducing allowance payment discrepancies.",
     stack: ["Vue", "Laravel", "PostgreSQL", "REST API"],
     status: "Private",
-    tone: "tone-green"
+    tone: "tone-green",
+    coverImage: "/images/presensi.png"
   },
   {
     id: "eregulasi",
@@ -22,10 +22,11 @@ const PROJECT_ITEMS = [
     summary: "Internal regulation portal with fast search, version control, and scheduled publishing.",
     challenge: "Policy documents were scattered across folders and latest versions were hard to track.",
     solution: "Built a centralized portal with tagging, full-text search, and version metadata.",
-    impact: "Policy lookup became faster and versioning mistakes were significantly reduced.",
+    impact: "PPolicy lookup became ~40% faster, and versioning mistakes dropped by ~30% after implementing clearer version rules, validation checks, and safer publish workflows.",
     stack: ["Vue", "Node.js", "PostgreSQL", "Redis"],
     status: "Private",
-    tone: "tone-blue"
+    tone: "tone-blue",
+    coverImage: "/images/e-regulasi.png"
   },
   {
     id: "icore-revamp",
@@ -34,10 +35,11 @@ const PROJECT_ITEMS = [
     summary: "Master data and workflow revamp focused on stability, speed, and maintainability.",
     challenge: "The legacy system became hard to extend due to tight coupling and slow database queries.",
     solution: "Executed phased refactoring, query optimization, and frontend component restructuring.",
-    impact: "Key screens became noticeably faster and regression defects were reduced.",
+    impact: "Delivered ~30% faster key screens, a more user-friendly UI, and ~40% fewer regression defects through component standardization and improved QA.",
     stack: ["React", "TypeScript", "PHP", "PostgreSQL"],
     status: "Private",
-    tone: "tone-amber"
+    tone: "tone-amber",
+    coverImage: "/images/icore-revamp.png"
   },
   {
     id: "meal",
@@ -45,11 +47,12 @@ const PROJECT_ITEMS = [
     type: "Enterprise System",
     summary: "Weekly meal planning app with cost estimation and automatic shopping list generation.",
     challenge: "Employees’ meal orders were hard to track. This often led to food overproduction, unclear daily demand, and difficulty maintaining a predictable monthly budget.",
-    solution: "Built a dynamic ordering system for mobile, website, and kiosk/machine with real-time order tracking, automated budget calculation, quota/portion controls per employee or unit, and auto-generated production/shopping lists for vendors/kitchen teams to match actual demand",
-    impact: "Ordering became more organized and transparent, food waste decreased, budgets became more predictable, and employee meal consumption was better controlled week to week.",
+    solution: "Built a dynamic ordering system for mobile, website, and kiosk/machine with real-time order tracking, automated budget calculation and quota/portion controls per employee or unit",
+    impact: "“Improved demand accuracy and operational transparency across mobile, web, and kiosk channels. Reduced leftover meals by ~50% through real-time quota/portion controls and vendor-ready production lists. Lowered the company’s meal provisioning costs by ~30% by aligning daily production with actual orders, making monthly budgeting more predictable and reducing week-to-week waste",
     stack: ["Next.js", "Tailwind", "Express Js"],
     status: "Private",
-    tone: "tone-rose"
+    tone: "tone-rose",
+    coverImage: "/images/emeal.png"
   }
 ];
 
@@ -155,6 +158,15 @@ function App() {
     setFormStatus("Message sent successfully! I will get back to you soon.");
     event.currentTarget.reset();
     setTimeout(() => setFormStatus(""), 5000);
+  };
+
+  const getProjectCoverStyle = (project) => {
+    if (!project?.coverImage) return undefined;
+    return {
+      backgroundImage: `url(${project.coverImage})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center"
+    };
   };
 
   return (
@@ -382,7 +394,7 @@ function App() {
                 <div className="grid md:grid-cols-2 gap-6">
                   {filteredProjects.map((project) => (
                     <article className="card rounded-2xl overflow-hidden glow-border group" key={project.id}>
-                      <div className={`h-48 project-cover ${project.tone}`}>
+                      <div className={`h-48 project-cover ${project.tone}`} style={getProjectCoverStyle(project)}>
                         <span className="project-private-chip">{project.status}</span>
                       </div>
                       <div className="p-6 space-y-4">
@@ -428,9 +440,8 @@ function App() {
                 <div className="space-y-8 relative pl-12">
                   <div className="experience-line" />
                   {[
-                    ["Senior Full Stack Developer", "TechCorp Inc.", "2022 - Present"],
-                    ["Full Stack Developer", "StartupXYZ", "2020 - 2022"],
-                    ["Junior Developer", "WebAgency Co.", "2018 - 2020"]
+                    ["Full Stack Developer", "Freelance", "2023 - Present"],
+                    ["Full Stack Developer ", "Civil Service Goverment", "2018 - present"],
                   ].map(([role, company, period]) => (
                     <div className="relative" key={role}>
                       <div className="experience-dot" />
@@ -563,7 +574,7 @@ function App() {
             aria-labelledby="project-modal-title"
             onClick={(event) => event.stopPropagation()}
           >
-            <div className={`project-modal-cover ${selectedProject.tone}`}>
+            <div className={`project-modal-cover ${selectedProject.tone}`} style={getProjectCoverStyle(selectedProject)}>
               <span className="project-private-chip">{selectedProject.status}</span>
             </div>
             <div className="p-6 md:p-8 space-y-5">
@@ -617,4 +628,3 @@ function App() {
 }
 
 export default App;
-
