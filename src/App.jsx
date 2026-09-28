@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { HeaderNav } from "./components/HeaderNav";
 import { ToolsPage } from "./components/ToolsPage";
+import { PdfToolsPage } from "./components/pdf/PdfToolsPage";
 
 const NAV_ITEMS = ["hero", "about", "skills", "projects", "experience", "contact"];
 const PROJECT_ITEMS = [
@@ -60,6 +61,9 @@ const PROJECT_ITEMS = [
 
 function getInitialPage() {
   const hash = window.location.hash;
+  if (hash.includes("/pdf-tools") || hash.includes("pdf")) {
+    return "pdf";
+  }
   if (hash.includes("/tools") || hash.includes("tools")) {
     return "tools";
   }
@@ -68,7 +72,7 @@ function getInitialPage() {
 
 function App() {
   const wrapperRef = useRef(null);
-  const [activePage, setActivePage] = useState(getInitialPage); // Sync with URL hash
+  const [activePage, setActivePage] = useState(getInitialPage); // 'portfolio' | 'tools' | 'pdf'
   const [activeSection, setActiveSection] = useState("hero");
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [activeProjectFilter, setActiveProjectFilter] = useState("All");
@@ -227,6 +231,8 @@ function App() {
       <main className="relative z-10 w-full">
         {activePage === "tools" ? (
           <ToolsPage />
+        ) : activePage === "pdf" ? (
+          <PdfToolsPage />
         ) : (
           <>
             <section id="hero" className="section flex items-center justify-center min-h-[calc(100vh-4rem)]">
@@ -250,7 +256,18 @@ function App() {
                       Crafting digital experiences through clean code and thoughtful design. Passionate about building
                       products that make a difference.
                     </p>
-                    <div className="flex flex-wrap gap-4">
+                    <div className="flex flex-wrap gap-3">
+                      <a
+                        href="#/pdf-tools"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.hash = "#/pdf-tools";
+                          setActivePage("pdf");
+                        }}
+                        className="btn-primary flex items-center gap-2"
+                      >
+                        <span>✂️🔀 Open PDF Tools (/pdf-tools)</span>
+                      </a>
                       <a
                         href="#/tools"
                         onClick={(e) => {
@@ -258,15 +275,12 @@ function App() {
                           window.location.hash = "#/tools";
                           setActivePage("tools");
                         }}
-                        className="btn-primary flex items-center gap-2"
+                        className="btn-secondary flex items-center gap-2"
                       >
-                        <span>🛠️ Open Formatters & Viewers (/tools)</span>
+                        <span>🛠️ Data Formatters</span>
                       </a>
                       <button type="button" className="btn-secondary" onClick={() => scrollToSection("projects")}>
                         View Projects
-                      </button>
-                      <button type="button" className="btn-secondary" onClick={() => scrollToSection("contact")}>
-                        Get in Touch
                       </button>
                     </div>
                   </div>

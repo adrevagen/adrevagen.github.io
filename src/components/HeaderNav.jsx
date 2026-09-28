@@ -7,6 +7,9 @@ export function HeaderNav({ activePage, setActivePage, onNavigateSection }) {
     if (page === "tools") {
       window.location.hash = "#/tools";
       setActivePage("tools");
+    } else if (page === "pdf") {
+      window.location.hash = "#/pdf-tools";
+      setActivePage("pdf");
     } else {
       window.location.hash = "#/";
       setActivePage("portfolio");
@@ -52,7 +55,7 @@ export function HeaderNav({ activePage, setActivePage, onNavigateSection }) {
               e.preventDefault();
               handleNavClick("portfolio");
             }}
-            className={`px-5 py-2 rounded-full text-xs font-mono font-medium transition-all ${
+            className={`px-4 py-2 rounded-full text-xs font-mono font-medium transition-all ${
               activePage === "portfolio"
                 ? "bg-green-500 text-black font-semibold shadow-md shadow-green-500/20"
                 : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -67,16 +70,33 @@ export function HeaderNav({ activePage, setActivePage, onNavigateSection }) {
               e.preventDefault();
               handleNavClick("tools");
             }}
-            className={`px-5 py-2 rounded-full text-xs font-mono font-medium transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-full text-xs font-mono font-medium transition-all flex items-center gap-1.5 ${
               activePage === "tools"
                 ? "bg-green-500 text-black font-semibold shadow-md shadow-green-500/20"
                 : "text-gray-300 hover:text-white hover:bg-white/5"
             }`}
           >
             <span>🛠️ Formatters & Viewers</span>
-            <span className="bg-cyan-400/20 text-cyan-300 px-1.5 py-0.5 rounded text-[10px] uppercase font-bold">
-              URL: /tools
+          </a>
+
+          {/* New PDF Tools Menu Item with Split & Merge Icons */}
+          <a
+            href="#/pdf-tools"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("pdf");
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-mono font-medium transition-all flex items-center gap-2 ${
+              activePage === "pdf"
+                ? "bg-gradient-to-r from-green-500 to-cyan-500 text-black font-semibold shadow-md shadow-green-500/20"
+                : "text-gray-300 hover:text-white hover:bg-white/5"
+            }`}
+          >
+            <span className="flex items-center gap-1">
+              <span>✂️</span>
+              <span>🔀</span>
             </span>
+            <span>PDF Tools (Split & Merge)</span>
           </a>
         </nav>
 
@@ -84,14 +104,14 @@ export function HeaderNav({ activePage, setActivePage, onNavigateSection }) {
         <div className="hidden md:flex items-center gap-3">
           {activePage === "portfolio" ? (
             <a
-              href="#/tools"
+              href="#/pdf-tools"
               onClick={(e) => {
                 e.preventDefault();
-                handleNavClick("tools");
+                handleNavClick("pdf");
               }}
               className="px-4 py-2 bg-gradient-to-r from-green-500/20 to-cyan-500/20 hover:from-green-500/30 hover:to-cyan-500/30 border border-green-500/30 text-green-400 rounded-xl text-xs font-mono font-medium transition-all flex items-center gap-2"
             >
-              <span>⚡ Open Tools (/tools)</span>
+              <span>✂️🔀 Open PDF Tools</span>
             </a>
           ) : (
             <a
@@ -150,6 +170,18 @@ export function HeaderNav({ activePage, setActivePage, onNavigateSection }) {
             }`}
           >
             🛠️ Formatters & Viewers (/tools)
+          </a>
+          <a
+            href="#/pdf-tools"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("pdf");
+            }}
+            className={`block w-full text-left px-4 py-2.5 rounded-xl font-mono text-sm transition-colors ${
+              activePage === "pdf" ? "bg-green-500/20 text-green-400 font-bold" : "text-gray-300"
+            }`}
+          >
+            ✂️🔀 PDF Tools (Split & Merge)
           </a>
         </div>
       )}
