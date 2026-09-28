@@ -567,3 +567,68 @@ body {
     height: 140px;
   }
 }
+
+/* Tree View Inspector Custom Styling */
+.tree-node-highlight {
+  background: rgba(0, 255, 136, 0.08);
+  border-radius: 6px;
+}
+
+.tree-val-null {
+  color: #7f848e;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.tree-val-boolean {
+  color: #e06c75;
+  font-weight: 600;
+}
+
+.tree-val-number {
+  color: #61afef;
+  font-weight: 600;
+}
+
+.tree-val-string {
+  color: #98c379;
+  word-break: break-word;
+}
+
+.tree-badge {
+  font-family: "Space Mono", monospace;
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.tree-badge-array {
+  background: rgba(224, 108, 117, 0.15);
+  color: #e06c75;
+  border: 1px solid rgba(224, 108, 117, 0.3);
+}
+
+.tree-badge-object {
+  background: rgba(97, 175, 239, 0.15);
+  color: #61afef;
+  border: 1px solid rgba(97, 175, 239, 0.3);
+}
+
+.tree-type-badge {
+  font-family: "Space Mono", monospace;
+  font-size: 10px;
+  padding: 0 4px;
+  border-radius: 3px;
+  opacity: 0.6;
+}
+
+/* Hide scrollbars for clean tab bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
