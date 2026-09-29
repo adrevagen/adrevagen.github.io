@@ -1,7 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { HeaderNav } from "./components/HeaderNav";
-import { ToolsPage } from "./components/ToolsPage";
-import { PdfToolsPage } from "./components/pdf/PdfToolsPage";
 
 const NAV_ITEMS = ["hero", "about", "skills", "projects", "experience", "contact"];
 const PROJECT_ITEMS = [
@@ -49,9 +47,9 @@ const PROJECT_ITEMS = [
     title: "Meal Planner",
     type: "Enterprise System",
     summary: "Weekly meal planning app with cost estimation and automatic shopping list generation.",
-    challenge: "Employees’ meal orders were hard to track. This often led to food overproduction, unclear daily demand, and difficulty maintaining a predictable monthly budget.",
+    challenge: "Employees' meal orders were hard to track. This often led to food overproduction, unclear daily demand, and difficulty maintaining a predictable monthly budget.",
     solution: "Built a dynamic ordering system for mobile, website, and kiosk/machine with real-time order tracking, automated budget calculation and quota/portion controls per employee or unit",
-    impact: "Improved demand accuracy and operational transparency across mobile, web, and kiosk channels. Reduced leftover meals by ~50% through real-time quota/portion controls and vendor-ready production lists. Lowered the company’s meal provisioning costs by ~30% by aligning daily production with actual orders, making monthly budgeting more predictable and reducing week-to-week waste",
+    impact: "Improved demand accuracy and operational transparency across mobile, web, and kiosk channels. Reduced leftover meals by ~50% through real-time quota/portion controls and vendor-ready production lists. Lowered the company's meal provisioning costs by ~30% by aligning daily production with actual orders, making monthly budgeting more predictable and reducing week-to-week waste",
     stack: ["Next.js", "Tailwind", "Express Js"],
     status: "Private",
     tone: "tone-rose",
@@ -59,20 +57,8 @@ const PROJECT_ITEMS = [
   }
 ];
 
-function getInitialPage() {
-  const hash = window.location.hash;
-  if (hash.includes("/pdf-tools") || hash.includes("pdf")) {
-    return "pdf";
-  }
-  if (hash.includes("/tools") || hash.includes("tools")) {
-    return "tools";
-  }
-  return "portfolio";
-}
-
 function App() {
   const wrapperRef = useRef(null);
-  const [activePage, setActivePage] = useState(getInitialPage); // 'portfolio' | 'tools' | 'pdf'
   const [activeSection, setActiveSection] = useState("hero");
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const [activeProjectFilter, setActiveProjectFilter] = useState("All");
@@ -103,20 +89,7 @@ function App() {
     return PROJECT_ITEMS.filter((project) => project.type === activeProjectFilter);
   }, [activeProjectFilter]);
 
-  // Listen for URL Hash Changes
   useEffect(() => {
-    const handleHashChange = () => {
-      const page = getInitialPage();
-      setActivePage(page);
-    };
-
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-
-  useEffect(() => {
-    if (activePage !== "portfolio") return;
-
     const wrapper = wrapperRef.current;
     if (!wrapper) return;
 
@@ -142,11 +115,9 @@ function App() {
     return () => {
       wrapper.removeEventListener("scroll", onScroll);
     };
-  }, [activePage]);
+  }, []);
 
   useEffect(() => {
-    if (activePage !== "portfolio") return;
-
     const bars = document.querySelectorAll(".skill-progress");
     const observer = new IntersectionObserver(
       (entries) => {
@@ -162,7 +133,7 @@ function App() {
 
     bars.forEach((bar) => observer.observe(bar));
     return () => observer.disconnect();
-  }, [activePage]);
+  }, []);
 
   useEffect(() => {
     if (!selectedProject) return;
@@ -178,14 +149,10 @@ function App() {
   }, [selectedProject]);
 
   const scrollToSection = (id) => {
-    window.location.hash = "#/";
-    setActivePage("portfolio");
-    setTimeout(() => {
-      const target = document.getElementById(id);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 50);
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const getProjectCoverStyle = (project) => {
@@ -206,35 +173,23 @@ function App() {
       </div>
 
       {/* Top Header Navbar */}
-      <HeaderNav
-        activePage={activePage}
-        setActivePage={setActivePage}
-        onNavigateSection={scrollToSection}
-      />
+      <HeaderNav onNavigateSection={scrollToSection} />
 
-      {/* Right Nav Dots for Portfolio page */}
-      {activePage === "portfolio" && (
-        <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4" id="nav-dots">
-          {NAV_ITEMS.map((item) => (
-            <button
-              key={item}
-              type="button"
-              className={`nav-dot ${activeSection === item ? "active" : ""}`}
-              data-section={item}
-              onClick={() => scrollToSection(item)}
-              aria-label={`Go to ${item} section`}
-            />
-          ))}
-        </nav>
-      )}
+      {/* Right Nav Dots */}
+      <nav className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-4" id="nav-dots">
+        {NAV_ITEMS.map((item) => (
+          <button
+            key={item}
+            type="button"
+            className={`nav-dot ${activeSection === item ? "active" : ""}`}
+            data-section={item}
+            onClick={() => scrollToSection(item)}
+            aria-label={`Go to ${item} section`}
+          />
+        ))}
+      </nav>
 
       <main className="relative z-10 w-full">
-        {activePage === "tools" ? (
-          <ToolsPage />
-        ) : activePage === "pdf" ? (
-          <PdfToolsPage />
-        ) : (
-          <>
             <section id="hero" className="section flex items-center justify-center min-h-[calc(100vh-4rem)]">
               <div className="max-w-6xl mx-auto w-full px-4">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -257,30 +212,11 @@ function App() {
                       products that make a difference.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <a
-                        href="#/pdf-tools"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.location.hash = "#/pdf-tools";
-                          setActivePage("pdf");
-                        }}
-                        className="btn-primary flex items-center gap-2"
-                      >
-                        <span>✂️🔀 Open PDF Tools (/pdf-tools)</span>
-                      </a>
-                      <a
-                        href="#/tools"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.location.hash = "#/tools";
-                          setActivePage("tools");
-                        }}
-                        className="btn-secondary flex items-center gap-2"
-                      >
-                        <span>🛠️ Data Formatters</span>
-                      </a>
-                      <button type="button" className="btn-secondary" onClick={() => scrollToSection("projects")}>
+                      <button type="button" className="btn-primary" onClick={() => scrollToSection("projects")}>
                         View Projects
+                      </button>
+                      <button type="button" className="btn-secondary" onClick={() => scrollToSection("contact")}>
+                        Contact Me
                       </button>
                     </div>
                   </div>
@@ -578,8 +514,6 @@ function App() {
                 </div>
               </div>
             </section>
-          </>
-        )}
       </main>
 
       {selectedProject && (
